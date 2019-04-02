@@ -1,24 +1,24 @@
+    
+var express = require('express');
+var router = express.Router();
 var db = require("../models");
 
-module.exports = function(app) {
-  // Get all examples
-  app.get("/api/examples", function(req, res) {
-    db.Example.findAll({}).then(function(dbExamples) {
-      res.json(dbExamples);
-    });
-  });
 
-  // Create a new example
-  app.post("/api/examples", function(req, res) {
-    db.Example.create(req.body).then(function(dbExample) {
-      res.json(dbExample);
-    });
-  });
+ router.get("/airports/search", function (req, res) {
 
-  // Delete an example by id
-  app.delete("/api/examples/:id", function(req, res) {
-    db.Example.destroy({ where: { id: req.params.id } }).then(function(dbExample) {
-      res.json(dbExample);
+     var type = req.query.type;  
+     var airportSearch =req.query.airport_search; 
+     db.Airport.findAll({
+         where: { [type]: airportSearch}
+      }).then(function(airports) {
+        console.log(airports)
+        res.render("results", {airports});
+      });
+    
+     
     });
-  });
-};
+
+   
+    
+
+module.exports = router;
